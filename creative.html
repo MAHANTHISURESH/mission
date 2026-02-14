@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ultimate Love Mission ❤️</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    background:black;
+    color:white;
+    font-family:Segoe UI;
+    text-align:center;
+    overflow:hidden;
+}
+
+/* 🌌 Calm Stars */
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    opacity:0.7;
+    animation:twinkle 4s infinite ease-in-out alternate;
+    pointer-events:none;
+    z-index:0;
+}
+
+@keyframes twinkle{
+    0%{opacity:0.2;}
+    50%{opacity:1;}
+    100%{opacity:0.3;}
+}
+
+/* 🌠 Shooting Star */
+.shooting-star{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    box-shadow:0 0 10px white,0 0 20px white;
+    border-radius:50%;
+    animation:shoot 5s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes shoot{
+    0%{transform:translate(-200px,-200px);opacity:1;}
+    100%{transform:translate(120vw,120vh);opacity:0;}
+}
+
+/* 💎 Glass UI */
+.section{
+    display:none;
+    margin-top:100px;
+    backdrop-filter:blur(15px);
+    background:rgba(255,255,255,0.1);
+    padding:30px;
+    border-radius:20px;
+    width:60%;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+    z-index:5;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:25px;
+    background:#ff1e4d;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+/* ❤️ Moving Heart */
+#movingHeart{
+    font-size:50px;
+    position:fixed;
+    cursor:pointer;
+    display:none;
+    z-index:1000;
+}
+
+/* 💖 Lyrics */
+#lyrics{
+    margin-top:20px;
+    font-size:22px;
+    min-height:60px;
+    color:#ffb3c6;
+}
+
+/* ❤️ Glowing 3D Heart */
+.heart3d{
+    position:absolute;
+    top:30%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(-45deg);
+    width:150px;
+    height:150px;
+    background:red;
+    animation:beat 1.2s infinite;
+    box-shadow:0 0 40px red, 0 0 80px crimson;
+}
+
+.heart3d:before,
+.heart3d:after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    background:red;
+    border-radius:50%;
+}
+
+.heart3d:before{ top:-75px; }
+.heart3d:after{ left:75px; }
+
+@keyframes beat{
+    0%{
+        transform:translate(-50%,-50%) rotate(-45deg) scale(1);
+        box-shadow:0 0 30px red;
+    }
+    50%{
+        transform:translate(-50%,-50%) rotate(-45deg) scale(1.15);
+        box-shadow:0 0 60px red,0 0 120px pink;
+    }
+    100%{
+        transform:translate(-50%,-50%) rotate(-45deg) scale(1);
+        box-shadow:0 0 30px red;
+    }
+}
+
+/* 🎆 Canvas */
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- LEVEL 1 -->
+<div id="level1" class="section" style="display:block;">
+    <h2>Level 1 💖</h2>
+    <p>What is my favorite person’s name?</p>
+    <input type="text" id="nameAnswer">
+    <br><br>
+    <button onclick="checkLevel1()">Submit</button>
+</div>
+
+<!-- LEVEL 2 -->
+<div id="level2" class="section">
+    <h2>Level 2 💓</h2>
+    <p>Catch my heart 😘</p>
+</div>
+
+<div id="movingHeart">❤️</div>
+
+<!-- LEVEL 3 -->
+<div id="level3" class="section">
+    <h2>Level 3 💞</h2>
+    <p>Do I love you? (yes/no)</p>
+    <input type="text" id="loveAnswer">
+    <br><br>
+    <button onclick="checkLevel3()">Unlock Final</button>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="section">
+    <div class="heart3d"></div>
+    <h1 style="margin-top:250px;">Happy Valentine’s Day Pravallika ❤️</h1>
+    <p>You are my forever and always ❤️</p>
+    <div id="lyrics"></div>
+</div>
+
+<audio id="song" src="Kabhi Kabhi Aditi Zindagi Jaane Tu.. Ya Jaane Na 320 Kbps.mp3"></audio>
+
+<script>
+
+/* 🌌 Stars */
+for(let i=0;i<150;i++){
+    let star=document.createElement("div");
+    star.className="star";
+    star.style.left=Math.random()*100+"vw";
+    star.style.top=Math.random()*100+"vh";
+    star.style.animationDuration=Math.random()*3+1+"s";
+    document.body.appendChild(star);
+}
+
+/* 🌠 Shooting Star */
+setInterval(()=>{
+    let star=document.createElement("div");
+    star.className="shooting-star";
+    star.style.top=Math.random()*20+"vh";
+    star.style.left="-100px";
+    document.body.appendChild(star);
+    setTimeout(()=>{ star.remove(); },5000);
+},7000);
+
+/* LEVEL 1 */
+function checkLevel1(){
+    let ans=document.getElementById("nameAnswer").value.trim().toLowerCase();
+    if(ans==="pravallika"){
+        document.getElementById("level1").style.display="none";
+        document.getElementById("level2").style.display="block";
+        startLevel2();
+    }else alert("Wrong 😜");
+}
+
+/* LEVEL 2 */
+function startLevel2(){
+    let heart=document.getElementById("movingHeart");
+    heart.style.display="block";
+
+    let move=setInterval(()=>{
+        heart.style.left=Math.random()*90+"vw";
+        heart.style.top=Math.random()*90+"vh";
+    },700);
+
+    heart.onclick=function(){
+        clearInterval(move);
+        heart.style.display="none";
+        document.getElementById("level2").style.display="none";
+        document.getElementById("level3").style.display="block";
+    }
+}
+
+/* LEVEL 3 */
+function checkLevel3(){
+    let ans=document.getElementById("loveAnswer").value.trim().toLowerCase();
+    if(ans==="yes"){
+        document.getElementById("level3").style.display="none";
+        document.getElementById("final").style.display="block";
+        startFireworks();
+        startSong();
+    }else alert("Wrong 😜");
+}
+
+/* 💖 Lyrics Typing Sync */
+function typeText(text){
+    let lyricsDiv=document.getElementById("lyrics");
+    lyricsDiv.innerHTML="";
+    let i=0;
+    let interval=setInterval(()=>{
+        lyricsDiv.innerHTML+=text.charAt(i);
+        i++;
+        if(i>=text.length) clearInterval(interval);
+    },40);
+}
+
+function startSong(){
+    let song=document.getElementById("song");
+    let lyrics=[
+        {time:8,text:"Kabhi kabhi Aditi zindagi mein yunhi koi apna lagta hai 💖"},
+        {time:13,text:"Kabhi kabhi Aditi woh bichad jaaye toh ek sapna lagta hai ✨"},
+        {time:40,text:"Aise mein koi kaise apne aansuon ko behne se roke 😌"},
+        {time:42,text:"Everything’s gonna be okay ❤️"}
+    ];
+
+    let currentIndex=-1;
+    song.play();
+
+    song.ontimeupdate=function(){
+        let current=song.currentTime;
+        for(let i=0;i<lyrics.length;i++){
+            if(current>=lyrics[i].time &&
+              (i===lyrics.length-1 || current<lyrics[i+1].time)){
+                if(currentIndex!==i){
+                    currentIndex=i;
+                    typeText(lyrics[i].text);
+                }
+                break;
+            }
+        }
+    }
+}
+
+/* 🎆 Animated Fireworks */
+let canvas=document.getElementById("fireworks");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+let fireworks=[];
+
+function Firework(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.targetY=Math.random()*canvas.height/2;
+    this.speed=4;
+    this.exploded=false;
+}
+
+Firework.prototype.update=function(){
+    if(!this.exploded){
+        this.y-=this.speed;
+        if(this.y<=this.targetY){
+            this.exploded=true;
+            for(let i=0;i<80;i++){
+                particles.push(new Particle(this.x,this.y));
+            }
+        }
+    }
+}
+
+Firework.prototype.draw=function(){
+    if(!this.exploded){
+        ctx.fillStyle="white";
+        ctx.fillRect(this.x,this.y,3,3);
+    }
+}
+
+function Particle(x,y){
+    this.x=x;
+    this.y=y;
+    this.speedX=(Math.random()-0.5)*6;
+    this.speedY=(Math.random()-0.5)*6;
+    this.life=100;
+    this.color="hsl("+Math.random()*360+",100%,50%)";
+}
+
+Particle.prototype.update=function(){
+    this.x+=this.speedX;
+    this.y+=this.speedY;
+    this.life--;
+}
+
+Particle.prototype.draw=function(){
+    ctx.fillStyle=this.color;
+    ctx.fillRect(this.x,this.y,3,3);
+}
+
+function startFireworks(){
+    setInterval(()=>{ fireworks.push(new Firework()); },1000);
+    animate();
+}
+
+function animate(){
+    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    for(let f of fireworks){ f.update(); f.draw(); }
+
+    for(let i=0;i<particles.length;i++){
+        particles[i].update();
+        particles[i].draw();
+        if(particles[i].life<=0){
+            particles.splice(i,1);
+            i--;
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+</script>
+
+</body>
+</html>
